@@ -27,6 +27,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/assets/upload',
+      name: 'asset-upload',
+      component: () => import('../views/AssetUploadView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/assets/:id',
       name: 'asset-detail',
       component: () => import('../views/AssetDetailView.vue'),

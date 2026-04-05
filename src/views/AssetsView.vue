@@ -3,6 +3,12 @@
     <div class="space-y-6">
       <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-800">Assets</h1>
+        <RouterLink
+          to="/assets/upload"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 text-sm font-medium"
+        >
+          + Subir asset
+        </RouterLink>
       </div>
 
       <!-- Filtros -->
