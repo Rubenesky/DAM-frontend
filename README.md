@@ -9,6 +9,8 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **Pinia** para gestión de estado global (autenticación y tema)
 - **Tailwind CSS** para estilos
 - **Axios** con interceptores para manejo global de errores
+- **CRUD completo** — ver, subir, editar y borrar assets
+- **🧠 Búsqueda inteligente con IA** — escribe en lenguaje natural y Gemini filtra automáticamente
 - **Filtros en tiempo real** sin recargar la página
 - **Paginación** consumiendo la API
 - **Subida de archivos** con drag & drop y vista previa
@@ -16,7 +18,8 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **Página 404** personalizada
 - **Responsive** con menú hamburguesa para móvil
 - **Modo oscuro** con persistencia en localStorage
-- **Metadatos generados por IA** visibles en la interfaz
+- **Metadatos generados por IA** visibles en la interfaz con badge ✨
+- **Aviso de duplicados** cuando la IA detecta assets similares
 
 ## 🛠️ Stack tecnológico
 
