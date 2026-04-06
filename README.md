@@ -6,34 +6,37 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 
 - **Vue 3** con Composition API
 - **Vue Router** con protección de rutas por autenticación
-- **Pinia** para gestión de estado global (autenticación)
+- **Pinia** para gestión de estado global (autenticación y tema)
 - **Tailwind CSS** para estilos
-- **Axios** para comunicación con la API REST
+- **Axios** con interceptores para manejo global de errores
 - **Filtros en tiempo real** sin recargar la página
-- **Subida de archivos** con drag & drop
+- **Paginación** consumiendo la API
+- **Subida de archivos** con drag & drop y vista previa
+- **Toast notifications** para feedback al usuario
+- **Página 404** personalizada
+- **Responsive** con menú hamburguesa para móvil
+- **Modo oscuro** con persistencia en localStorage
 - **Metadatos generados por IA** visibles en la interfaz
 
 ## 🛠️ Stack tecnológico
 
-| Capa          | Tecnología   |
-| ------------- | ------------ |
-| Framework     | Vue 3        |
-| Routing       | Vue Router   |
-| Estado global | Pinia        |
-| HTTP Client   | Axios        |
-| Estilos       | Tailwind CSS |
-| Build tool    | Vite         |
+| Capa | Tecnología |
+|------|-----------|
+| Framework | Vue 3 |
+| Routing | Vue Router |
+| Estado global | Pinia |
+| HTTP Client | Axios |
+| Estilos | Tailwind CSS |
+| Build tool | Vite |
 
 ## ⚙️ Instalación local
 
 ### Requisitos previos
-
 - Node.js 18+
 - npm
 - [DAM Platform](https://github.com/Rubenesky/dam-platform) corriendo en local
 
 ### Pasos
-
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/Rubenesky/dam-frontend.git
@@ -53,28 +56,57 @@ Entra a `http://localhost:5173` en el navegador.
 Este proyecto consume la API REST de [DAM Platform](https://github.com/Rubenesky/dam-platform). Asegúrate de que el backend está corriendo en `http://localhost:8000` antes de arrancar el frontend.
 
 La configuración de la URL base de la API está en `src/api/axios.js`:
-
 ```javascript
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+    baseURL: 'http://localhost:8000/api',
 })
 ```
 
 ## 📱 Vistas disponibles
 
-| Ruta             | Vista                              | Acceso      |
-| ---------------- | ---------------------------------- | ----------- |
-| `/login`         | Formulario de login                | Público     |
-| `/dashboard`     | Estadísticas y assets recientes    | Autenticado |
-| `/assets`        | Listado con filtros en tiempo real | Autenticado |
-| `/assets/:id`    | Detalle de asset con metadatos IA  | Autenticado |
-| `/assets/upload` | Subida de archivos                 | Autenticado |
+| Ruta | Vista | Acceso |
+|------|-------|--------|
+| `/login` | Formulario de login | Público |
+| `/dashboard` | Estadísticas y assets recientes | Autenticado |
+| `/assets` | Listado con filtros y paginación | Autenticado |
+| `/assets/:id` | Detalle de asset con metadatos IA | Autenticado |
+| `/assets/upload` | Subida con drag & drop y vista previa | Autenticado |
+| `/*` | Página 404 personalizada | Público |
 
 ## 🔐 Autenticación
 
 El frontend usa autenticación por token con Laravel Sanctum. Al hacer login se guarda el token en `localStorage` y se añade automáticamente a todas las peticiones via un interceptor de Axios.
 
-Si el token expira o es inválido, el usuario es redirigido automáticamente al login.
+Si el token expira o es inválido, el usuario es redirigido automáticamente al login con un mensaje de error.
+
+## 🌙 Modo oscuro
+
+La preferencia de tema se guarda en `localStorage` y persiste entre sesiones. El botón de cambio de tema está disponible en el navbar tanto en escritorio como en móvil.
+
+## ⚠️ Manejo de errores
+
+Los errores de la API se gestionan globalmente mediante interceptores de Axios:
+
+- **Sin conexión** — aviso de servidor no disponible
+- **401** — redirección automática al login
+- **403** — aviso de permisos insuficientes
+- **404** — aviso de recurso no encontrado
+- **422** — muestra el primer error de validación
+- **500+** — aviso de error en el servidor
+
+## 📸 Capturas de pantalla
+
+### Dashboard
+![Dashboard](screenshots/01-dashboard.png)
+
+### Listado de assets
+![Assets](screenshots/02-assets.png)
+
+### Subida con vista previa
+![Upload](screenshots/03-upload.png)
+
+### Modo oscuro
+![Dark mode](screenshots/04-dark-mode.png)
 
 ## 👨‍💻 Autor
 
