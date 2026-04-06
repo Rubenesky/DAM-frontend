@@ -38,6 +38,11 @@ const router = createRouter({
       component: () => import('../views/AssetDetailView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFoundView.vue'),
+    },
   ],
 })
 
