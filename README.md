@@ -20,23 +20,25 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 
 ## 🛠️ Stack tecnológico
 
-| Capa | Tecnología |
-|------|-----------|
-| Framework | Vue 3 |
-| Routing | Vue Router |
-| Estado global | Pinia |
-| HTTP Client | Axios |
-| Estilos | Tailwind CSS |
-| Build tool | Vite |
+| Capa          | Tecnología   |
+| ------------- | ------------ |
+| Framework     | Vue 3        |
+| Routing       | Vue Router   |
+| Estado global | Pinia        |
+| HTTP Client   | Axios        |
+| Estilos       | Tailwind CSS |
+| Build tool    | Vite         |
 
 ## ⚙️ Instalación local
 
 ### Requisitos previos
+
 - Node.js 18+
 - npm
 - [DAM Platform](https://github.com/Rubenesky/dam-platform) corriendo en local
 
 ### Pasos
+
 ```bash
 # 1. Clonar el repositorio
 git clone https://github.com/Rubenesky/dam-frontend.git
@@ -56,22 +58,23 @@ Entra a `http://localhost:5173` en el navegador.
 Este proyecto consume la API REST de [DAM Platform](https://github.com/Rubenesky/dam-platform). Asegúrate de que el backend está corriendo en `http://localhost:8000` antes de arrancar el frontend.
 
 La configuración de la URL base de la API está en `src/api/axios.js`:
+
 ```javascript
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api',
+  baseURL: 'http://localhost:8000/api',
 })
 ```
 
 ## 📱 Vistas disponibles
 
-| Ruta | Vista | Acceso |
-|------|-------|--------|
-| `/login` | Formulario de login | Público |
-| `/dashboard` | Estadísticas y assets recientes | Autenticado |
-| `/assets` | Listado con filtros y paginación | Autenticado |
-| `/assets/:id` | Detalle de asset con metadatos IA | Autenticado |
+| Ruta             | Vista                                 | Acceso      |
+| ---------------- | ------------------------------------- | ----------- |
+| `/login`         | Formulario de login                   | Público     |
+| `/dashboard`     | Estadísticas y assets recientes       | Autenticado |
+| `/assets`        | Listado con filtros y paginación      | Autenticado |
+| `/assets/:id`    | Detalle de asset con metadatos IA     | Autenticado |
 | `/assets/upload` | Subida con drag & drop y vista previa | Autenticado |
-| `/*` | Página 404 personalizada | Público |
+| `/*`             | Página 404 personalizada              | Público     |
 
 ## 🔐 Autenticación
 
@@ -97,16 +100,20 @@ Los errores de la API se gestionan globalmente mediante interceptores de Axios:
 ## 📸 Capturas de pantalla
 
 ### Dashboard
-![Dashboard](screenshots/01-dashboard.png)
+
+![Dashboard](screenshots/01-dashboard.jpg)
 
 ### Listado de assets
-![Assets](screenshots/02-assets.png)
+
+![Assets](screenshots/02-assets.jpg)
 
 ### Subida con vista previa
-![Upload](screenshots/03-upload.png)
+
+![Upload](screenshots/03-upload.jpg)
 
 ### Modo oscuro
-![Dark mode](screenshots/04-dark-mode.png)
+
+![Dark mode](screenshots/04-dark-mode.jpg)
 
 ## 👨‍💻 Autor
 
