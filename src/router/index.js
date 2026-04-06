@@ -33,6 +33,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: '/assets/:id/edit',
+      name: 'asset-edit',
+      component: () => import('../views/AssetEditView.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
       path: '/assets/:id',
       name: 'asset-detail',
       component: () => import('../views/AssetDetailView.vue'),
@@ -46,7 +52,6 @@ const router = createRouter({
   ],
 })
 
-// Guard de navegación — protege rutas
 router.beforeEach((to) => {
   const auth = useAuthStore()
 
