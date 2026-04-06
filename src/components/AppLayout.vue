@@ -1,5 +1,8 @@
 <template>
   <div class="min-h-screen bg-gray-100">
+    <!-- Toast notifications -->
+    <ToastNotification />
+
     <!-- Navbar -->
     <nav class="bg-white shadow">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,13 +49,17 @@
 
 <script setup>
 import { useAuthStore } from '../stores/auth'
+import { useToastStore } from '../stores/toast'
 import { useRouter } from 'vue-router'
+import ToastNotification from './ToastNotification.vue'
 
 const auth = useAuthStore()
+const toast = useToastStore()
 const router = useRouter()
 
 async function handleLogout() {
   await auth.logout()
+  toast.success('Sesión cerrada correctamente')
   router.push({ name: 'login' })
 }
 </script>

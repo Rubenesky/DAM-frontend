@@ -53,7 +53,6 @@
           :to="`/assets/${asset.id}`"
           class="bg-white rounded-xl shadow hover:shadow-lg transition p-4 block"
         >
-          <!-- Previsualización -->
           <div
             class="w-full h-40 rounded-lg mb-3 overflow-hidden bg-gray-100 flex items-center justify-center"
           >
@@ -85,6 +84,44 @@
           </span>
         </RouterLink>
       </div>
+
+      <!-- Paginación -->
+      <div v-if="meta.last_page > 1" class="flex justify-center items-center gap-2">
+        <button
+          @click="changePage(meta.current_page - 1)"
+          :disabled="meta.current_page === 1"
+          class="px-3 py-2 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          ← Anterior
+        </button>
+
+        <button
+          v-for="page in meta.last_page"
+          :key="page"
+          @click="changePage(page)"
+          class="px-3 py-2 rounded-lg border text-sm"
+          :class="
+            page === meta.current_page
+              ? 'bg-blue-600 text-white border-blue-600'
+              : 'border-gray-300 hover:bg-gray-50'
+          "
+        >
+          {{ page }}
+        </button>
+
+        <button
+          @click="changePage(meta.current_page + 1)"
+          :disabled="meta.current_page === meta.last_page"
+          class="px-3 py-2 rounded-lg border border-gray-300 text-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Siguiente →
+        </button>
+      </div>
+
+      <!-- Total resultados -->
+      <p v-if="meta.total > 0" class="text-center text-sm text-gray-400">
+        {{ meta.total }} asset(s) en total
+      </p>
     </div>
   </AppLayout>
 </template>
@@ -99,6 +136,12 @@ const assets = ref([])
 const search = ref('')
 const filterType = ref('')
 const filterStatus = ref('')
+const meta = ref({
+  total: 0,
+  per_page: 15,
+  current_page: 1,
+  last_page: 1,
+})
 
 const filteredAssets = computed(() => {
   return assets.value.filter((asset) => {
@@ -111,14 +154,24 @@ const filteredAssets = computed(() => {
   })
 })
 
-onMounted(async () => {
+async function fetchAssets(page = 1) {
+  loading.value = true
   try {
-    const response = await api.get('/assets')
+    const response = await api.get(`/assets?page=${page}`)
     assets.value = response.data.data
+    meta.value = response.data.meta
   } catch (e) {
     console.error(e)
   } finally {
     loading.value = false
   }
-})
+}
+
+function changePage(page) {
+  if (page < 1 || page > meta.value.last_page) return
+  fetchAssets(page)
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+onMounted(() => fetchAssets())
 </script>
