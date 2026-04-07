@@ -24,6 +24,13 @@
               >
                 Assets
               </RouterLink>
+              <RouterLink
+                to="/rag"
+                class="text-gray-600 dark:text-gray-300 hover:text-blue-600 text-sm font-medium"
+                active-class="text-blue-600"
+              >
+                🧠 Chat IA
+              </RouterLink>
             </div>
           </div>
 
@@ -32,7 +39,6 @@
             <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full capitalize">
               {{ auth.user?.role }}
             </span>
-            <!-- Botón modo oscuro -->
             <button
               @click="theme.toggle()"
               class="text-gray-500 dark:text-gray-300 hover:text-blue-600 text-lg"
@@ -95,6 +101,14 @@
           @click="menuOpen = false"
         >
           Assets
+        </RouterLink>
+        <RouterLink
+          to="/rag"
+          class="block text-gray-600 dark:text-gray-300 hover:text-blue-600 text-sm font-medium"
+          active-class="text-blue-600"
+          @click="menuOpen = false"
+        >
+          🧠 Chat IA
         </RouterLink>
         <div class="pt-2 border-t border-gray-100 dark:border-gray-700">
           <p class="text-sm text-gray-600 dark:text-gray-300">{{ auth.user?.name }}</p>
