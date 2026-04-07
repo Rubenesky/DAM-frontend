@@ -22,6 +22,7 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **Aviso de duplicados** cuando la IA detecta assets similares
 - **🧠 Generador de variantes con IA** — sugerencias de títulos, descripciones y tags aplicables con un clic
 - **🔒 Detección de duplicados exactos** — bloquea la subida del mismo archivo via hash MD5
+- **🤖 RAG — Chat con la base de datos** — pregunta en lenguaje natural sobre tus assets y la IA responde con datos reales
 
 ## 🛠️ Stack tecnológico
 
