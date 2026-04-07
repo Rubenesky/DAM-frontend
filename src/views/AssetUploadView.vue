@@ -175,9 +175,13 @@ async function handleUpload() {
       router.push({ name: 'assets' })
     }, 2000)
   } catch (e) {
-    toast.error('Error al subir el archivo. Inténtalo de nuevo.')
-  } finally {
-    loading.value = false
+    if (e.response?.status === 409) {
+      toast.error('❌ Este archivo exacto ya existe en la plataforma. No se ha subido.')
+    } else if (e.response?.status === 503) {
+      toast.error('La IA está ocupada. Espera unos segundos e inténtalo de nuevo.')
+    } else {
+      toast.error('Error al subir el archivo. Inténtalo de nuevo.')
+    }
   }
 }
 </script>
