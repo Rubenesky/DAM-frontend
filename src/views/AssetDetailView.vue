@@ -129,6 +129,93 @@
           </dl>
         </div>
       </div>
+
+      <!-- Generador de variantes con IA -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-200">🧠 Sugerencias de IA</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              La IA puede sugerirte títulos alternativos, descripciones mejoradas y tags
+              adicionales.
+            </p>
+          </div>
+          <button
+            @click="generateVariants"
+            :disabled="variantsLoading"
+            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 disabled:opacity-50 text-sm font-medium"
+          >
+            {{ variantsLoading ? 'Generando...' : '✨ Generar sugerencias' }}
+          </button>
+        </div>
+
+        <!-- Variantes generadas -->
+        <div v-if="variants" class="space-y-4">
+          <!-- Títulos alternativos -->
+          <div v-if="variants.titles?.length">
+            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Títulos alternativos
+            </h3>
+            <div class="space-y-2">
+              <div
+                v-for="(title, i) in variants.titles"
+                :key="i"
+                class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <span class="text-sm text-gray-800 dark:text-gray-200">{{ title }}</span>
+                <button
+                  @click="applyVariant('title', title)"
+                  class="text-xs text-blue-600 hover:underline ml-2 shrink-0"
+                >
+                  Usar este
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Descripciones mejoradas -->
+          <div v-if="variants.descriptions?.length">
+            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Descripciones mejoradas
+            </h3>
+            <div class="space-y-2">
+              <div
+                v-for="(desc, i) in variants.descriptions"
+                :key="i"
+                class="flex justify-between items-start p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+              >
+                <span class="text-sm text-gray-800 dark:text-gray-200">{{ desc }}</span>
+                <button
+                  @click="applyVariant('description', desc)"
+                  class="text-xs text-blue-600 hover:underline ml-2 shrink-0"
+                >
+                  Usar esta
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tags adicionales -->
+          <div v-if="variants.additional_tags?.length">
+            <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Tags adicionales sugeridos
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="tag in variants.additional_tags"
+                :key="tag"
+                @click="applyTag(tag)"
+                class="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full hover:bg-purple-200 transition"
+              >
+                + {{ tag }}
+              </button>
+            </div>
+            <p class="text-xs text-gray-400 mt-2">
+              Haz clic en un tag para añadirlo a los metadatos
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </AppLayout>
 </template>
@@ -147,6 +234,8 @@ const auth = useAuthStore()
 const toast = useToastStore()
 const loading = ref(true)
 const asset = ref(null)
+const variants = ref(null)
+const variantsLoading = ref(false)
 
 function formatDate(dateString) {
   return new Date(dateString).toLocaleDateString('es-ES', {
@@ -167,6 +256,62 @@ async function handleDelete() {
     router.push({ name: 'assets' })
   } catch (e) {
     toast.error('Error al eliminar el asset.')
+  }
+}
+
+async function generateVariants() {
+  variantsLoading.value = true
+  variants.value = null
+
+  try {
+    const response = await api.post(`/assets/${route.params.id}/variants`)
+    variants.value = response.data.variants
+    toast.success('Sugerencias generadas correctamente.')
+  } catch (e) {
+    toast.error('Error al generar sugerencias. Inténtalo de nuevo.')
+  } finally {
+    variantsLoading.value = false
+  }
+}
+
+async function applyVariant(field, value) {
+  try {
+    const currentTags = asset.value.metadata?.tags?.join(', ') ?? ''
+    await api.patch(`/assets/${route.params.id}`, {
+      title: field === 'title' ? value : asset.value.metadata?.title,
+      description: field === 'description' ? value : asset.value.metadata?.description,
+      tags: currentTags,
+    })
+
+    // Actualizamos el asset en local
+    if (field === 'title') asset.value.metadata.title = value
+    if (field === 'description') asset.value.metadata.description = value
+
+    toast.success('Metadato actualizado correctamente.')
+  } catch (e) {
+    toast.error('Error al aplicar la sugerencia.')
+  }
+}
+
+async function applyTag(tag) {
+  try {
+    const currentTags = asset.value.metadata?.tags ?? []
+    if (currentTags.includes(tag)) {
+      toast.info('Ese tag ya existe en los metadatos.')
+      return
+    }
+
+    const newTags = [...currentTags, tag]
+    await api.patch(`/assets/${route.params.id}`, {
+      title: asset.value.metadata?.title,
+      description: asset.value.metadata?.description,
+      tags: newTags.join(', '),
+    })
+
+    asset.value.metadata.tags = newTags
+    toast.success(`Tag "${tag}" añadido correctamente.`)
+  } catch (e) {
+    toast.error('Error al añadir el tag.')
   }
 }
 
