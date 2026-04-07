@@ -20,6 +20,8 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **Modo oscuro** con persistencia en localStorage
 - **Metadatos generados por IA** visibles en la interfaz con badge ✨
 - **Aviso de duplicados** cuando la IA detecta assets similares
+- **🧠 Generador de variantes con IA** — sugerencias de títulos, descripciones y tags aplicables con un clic
+- **🔒 Detección de duplicados exactos** — bloquea la subida del mismo archivo via hash MD5
 
 ## 🛠️ Stack tecnológico
 
