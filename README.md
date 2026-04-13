@@ -2,6 +2,14 @@
 
 Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Platform](https://github.com/Rubenesky/dam-platform).
 
+## 🌐 Demo en producción
+
+**Frontend:** https://69dd308a7b42221f2ffba6b8--reliable-souffle-05bb52.netlify.app
+
+**Backend API:** https://dam-platform.onrender.com
+
+> ⚠️ El servidor backend puede tardar 30-50 segundos en arrancar la primera vez por ser el plan gratuito de Render.
+
 ## 🚀 Características
 
 - **Vue 3** con Composition API
