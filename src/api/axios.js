@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useToastStore } from '../stores/toast'
 
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: 'https://dam-platform.onrender.com/api',
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
