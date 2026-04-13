@@ -4,7 +4,7 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 
 ## 🌐 Demo en producción
 
-**Frontend:** https://69dd308a7b42221f2ffba6b8--reliable-souffle-05bb52.netlify.app
+**Frontend:** https://dam-platform-ai.netlify.app
 
 **Backend API:** https://dam-platform.onrender.com
 
