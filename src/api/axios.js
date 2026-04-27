@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useToastStore } from '../stores/toast'
 
 const api = axios.create({
-  baseURL: 'https://dam-platform.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
