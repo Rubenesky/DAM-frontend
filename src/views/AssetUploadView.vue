@@ -128,10 +128,25 @@ function handleDrop(event) {
   if (file) setFile(file)
 }
 
+const ALLOWED_TYPES = [
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+  'application/pdf',
+  'video/mp4', 'video/quicktime', 'video/x-msvideo',
+  'audio/mpeg', 'audio/wav',
+]
+const MAX_SIZE_BYTES = 10 * 1024 * 1024
+
 function setFile(file) {
+  if (!ALLOWED_TYPES.includes(file.type)) {
+    toast.error('Tipo de archivo no permitido. Usa imágenes, PDF, vídeo o audio.')
+    return
+  }
+  if (file.size > MAX_SIZE_BYTES) {
+    toast.error('El archivo supera el límite de 10MB.')
+    return
+  }
   selectedFile.value = file
   preview.value = null
-
   if (file.type.startsWith('image/')) {
     const reader = new FileReader()
     reader.onload = (e) => {
