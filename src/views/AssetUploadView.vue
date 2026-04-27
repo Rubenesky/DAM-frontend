@@ -129,7 +129,7 @@ function handleDrop(event) {
 }
 
 const ALLOWED_TYPES = [
-  'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml',
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp',
   'application/pdf',
   'video/mp4', 'video/quicktime', 'video/x-msvideo',
   'audio/mpeg', 'audio/wav',
