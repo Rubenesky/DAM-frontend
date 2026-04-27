@@ -95,6 +95,8 @@
               v-if="asset.mime_type.startsWith('image/')"
               :src="asset.url"
               :alt="asset.original_name"
+              loading="lazy"
+              decoding="async"
               class="w-full h-full object-cover"
             />
             <span v-else class="text-4xl">📄</span>
