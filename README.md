@@ -1,5 +1,7 @@
 # DAM Frontend — Digital Asset Management
 
+![Tests](https://github.com/Rubenesky/dam-frontend/actions/workflows/tests.yml/badge.svg)
+
 Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Platform](https://github.com/Rubenesky/dam-platform).
 
 ## 🌐 Demo en producción
