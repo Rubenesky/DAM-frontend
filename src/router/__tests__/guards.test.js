@@ -28,6 +28,7 @@ function runGuard(to, authToken) {
 describe('Router guards', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
+    vi.clearAllMocks()
   })
 
   it('ruta protegida sin token redirige a /login', () => {
