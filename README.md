@@ -44,6 +44,8 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 | HTTP Client   | Axios        |
 | Estilos       | Tailwind CSS |
 | Build tool    | Vite         |
+| Tests         | Vitest       |
+| CI/CD         | GitHub Actions |
 
 ## ⚙️ Instalación local
 
@@ -63,7 +65,11 @@ cd dam-frontend
 # 2. Instalar dependencias
 npm install
 
-# 3. Arrancar el servidor de desarrollo
+# 3. Configurar variables de entorno
+cp .env.example .env
+# Editar .env y ajustar VITE_API_URL si es necesario
+
+# 4. Arrancar el servidor de desarrollo
 npm run dev
 ```
 
@@ -76,10 +82,13 @@ Este proyecto consume la API REST de [DAM Platform](https://github.com/Rubenesky
 La configuración de la URL base de la API está en `src/api/axios.js`:
 
 ```javascript
+// En src/api/axios.js
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api',
+  baseURL: import.meta.env.VITE_API_URL,
 })
 ```
+
+> La URL de la API se configura mediante la variable de entorno `VITE_API_URL`. Copia `.env.example` a `.env` y ajusta el valor según tu entorno (local o producción).
 
 ## 📱 Vistas disponibles
 
@@ -130,6 +139,20 @@ Los errores de la API se gestionan globalmente mediante interceptores de Axios:
 ### Modo oscuro
 
 ![Dark mode](screenshots/04-dark-mode.jpg)
+
+## 🧪 Tests
+
+9 tests automatizados con CI/CD en GitHub Actions.
+
+```bash
+# Ejecutar todos los tests
+npm run test
+```
+
+Los tests cubren:
+- Auth store: login guarda token, logout limpia estado, isAuthenticated
+- Validación de archivos: tipos no permitidos, archivos >10MB, archivos válidos
+- Router guards: redirección sin token, acceso con token, guest con token
 
 ## 👨‍💻 Autor
 
