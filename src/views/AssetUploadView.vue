@@ -82,6 +82,15 @@
             <p><span class="font-medium">Tipo:</span> {{ selectedFile.type }}</p>
           </div>
 
+          <!-- Estado de procesamiento IA -->
+          <div
+            v-if="pollingMessage"
+            class="mb-4 p-3 bg-blue-50 dark:bg-blue-900 rounded-lg text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2"
+          >
+            <span class="animate-spin inline-block">⏳</span>
+            {{ pollingMessage }}
+          </div>
+
           <!-- Botones -->
           <div class="flex justify-end gap-3">
             <RouterLink
@@ -92,7 +101,7 @@
             </RouterLink>
             <button
               type="submit"
-              :disabled="!selectedFile || loading"
+              :disabled="!selectedFile || loading || !!pollingMessage"
               class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 text-sm font-medium"
             >
               {{ loading ? 'Subiendo...' : 'Subir asset' }}
@@ -117,6 +126,7 @@ const fileInput = ref(null)
 const selectedFile = ref(null)
 const preview = ref(null)
 const loading = ref(false)
+const pollingMessage = ref('')
 
 function handleFileChange(event) {
   const file = event.target.files[0]
@@ -175,28 +185,60 @@ async function handleUpload() {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
-    if (response.data.has_duplicates) {
-      const similar = response.data.similar_assets
-      toast.info(
-        `⚠️ Asset subido pero se detectaron ${similar.length} asset(s) similar(es). Revisa si es un duplicado.`,
-      )
-    } else {
-      toast.success('Asset subido correctamente. La IA está generando los metadatos...')
-    }
-
+    const assetId = response.data.data.id
     clearFile()
+    loading.value = false
+    pollingMessage.value = 'La IA está analizando tu imagen...'
 
-    setTimeout(() => {
-      router.push({ name: 'assets' })
-    }, 2000)
+    await pollStatus(assetId)
+
   } catch (e) {
+    loading.value = false
     if (e.response?.status === 409) {
       toast.error('❌ Este archivo exacto ya existe en la plataforma. No se ha subido.')
-    } else if (e.response?.status === 503) {
-      toast.error('La IA está ocupada. Espera unos segundos e inténtalo de nuevo.')
     } else {
       toast.error('Error al subir el archivo. Inténtalo de nuevo.')
     }
   }
+}
+
+function pollStatus(assetId) {
+  return new Promise((resolve) => {
+    const MAX_ATTEMPTS = 20
+    let attempts = 0
+
+    const interval = setInterval(async () => {
+      attempts++
+
+      try {
+        const res = await api.get(`/assets/${assetId}/status`)
+        const { status } = res.data
+
+        if (status === 'processed') {
+          clearInterval(interval)
+          pollingMessage.value = ''
+          toast.success('Asset procesado correctamente ✨')
+          router.push({ name: 'asset-detail', params: { id: assetId } })
+          resolve()
+        } else if (status === 'failed') {
+          clearInterval(interval)
+          pollingMessage.value = ''
+          toast.error('No se pudieron generar los metadatos. El asset está disponible sin ellos.')
+          router.push({ name: 'asset-detail', params: { id: assetId } })
+          resolve()
+        } else if (attempts >= MAX_ATTEMPTS) {
+          clearInterval(interval)
+          pollingMessage.value = ''
+          router.push({ name: 'asset-detail', params: { id: assetId } })
+          resolve()
+        }
+      } catch {
+        clearInterval(interval)
+        pollingMessage.value = ''
+        router.push({ name: 'asset-detail', params: { id: assetId } })
+        resolve()
+      }
+    }, 3000)
+  })
 }
 </script>
