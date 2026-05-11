@@ -34,6 +34,23 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **🔒 Detección de duplicados exactos** — bloquea la subida del mismo archivo via hash MD5
 - **🤖 RAG — Chat con la base de datos** — pregunta en lenguaje natural sobre tus assets y la IA responde con datos reales
 
+## 🏗️ Arquitectura
+
+```mermaid
+graph LR
+    subgraph SPA["Vue 3 SPA"]
+        ROUTER["Vue Router<br/>Rutas protegidas"]
+        STORE["Pinia Stores<br/>auth · theme · toast"]
+        VIEWS["Vistas<br/>Dashboard · Assets · RAG · Upload"]
+        AXIOS["Axios<br/>Interceptores globales"]
+    end
+
+    ROUTER --> VIEWS
+    VIEWS --> STORE
+    VIEWS --> AXIOS
+    AXIOS -->|"Bearer token"| API["API Laravel<br/>dam-platform.onrender.com"]
+```
+
 ## 🛠️ Stack tecnológico
 
 | Capa          | Tecnología   |
