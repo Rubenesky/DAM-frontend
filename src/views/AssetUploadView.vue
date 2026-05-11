@@ -114,11 +114,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppLayout from '../components/AppLayout.vue'
 import { useToastStore } from '../stores/toast'
 import api from '../api/axios'
+
+let activeInterval = null
 
 const router = useRouter()
 const toast = useToastStore()
@@ -127,6 +129,10 @@ const selectedFile = ref(null)
 const preview = ref(null)
 const loading = ref(false)
 const pollingMessage = ref('')
+
+onUnmounted(() => {
+  if (activeInterval) clearInterval(activeInterval)
+})
 
 function handleFileChange(event) {
   const file = event.target.files[0]
@@ -188,7 +194,7 @@ async function handleUpload() {
     const assetId = response.data.data.id
     clearFile()
     loading.value = false
-    pollingMessage.value = 'La IA está analizando tu imagen...'
+    pollingMessage.value = 'La IA está analizando tu archivo...'
 
     await pollStatus(assetId)
 
@@ -207,7 +213,7 @@ function pollStatus(assetId) {
     const MAX_ATTEMPTS = 20
     let attempts = 0
 
-    const interval = setInterval(async () => {
+    activeInterval = setInterval(async () => {
       attempts++
 
       try {
@@ -215,25 +221,25 @@ function pollStatus(assetId) {
         const { status } = res.data
 
         if (status === 'processed') {
-          clearInterval(interval)
+          clearInterval(activeInterval)
           pollingMessage.value = ''
           toast.success('Asset procesado correctamente ✨')
           router.push({ name: 'asset-detail', params: { id: assetId } })
           resolve()
         } else if (status === 'failed') {
-          clearInterval(interval)
+          clearInterval(activeInterval)
           pollingMessage.value = ''
           toast.error('No se pudieron generar los metadatos. El asset está disponible sin ellos.')
           router.push({ name: 'asset-detail', params: { id: assetId } })
           resolve()
         } else if (attempts >= MAX_ATTEMPTS) {
-          clearInterval(interval)
+          clearInterval(activeInterval)
           pollingMessage.value = ''
           router.push({ name: 'asset-detail', params: { id: assetId } })
           resolve()
         }
       } catch {
-        clearInterval(interval)
+        clearInterval(activeInterval)
         pollingMessage.value = ''
         router.push({ name: 'asset-detail', params: { id: assetId } })
         resolve()
