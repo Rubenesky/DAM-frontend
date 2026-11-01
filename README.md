@@ -32,7 +32,7 @@ Frontend SPA desarrollado con Vue 3 que consume la API REST del proyecto [DAM Pl
 - **Aviso de duplicados** cuando la IA detecta assets similares
 - **🧠 Generador de variantes con IA** — sugerencias de títulos, descripciones y tags aplicables con un clic
 - **🔒 Detección de duplicados exactos** — bloquea la subida del mismo archivo via hash MD5
-- **🤖 RAG — Chat con la base de datos** — pregunta en lenguaje natural sobre tus assets y la IA responde con datos reales
+- **🤖 Chat con la plataforma** — pregunta en lenguaje natural por las estadísticas de tus assets; el backend inyecta datos agregados de la base de datos como contexto a Gemini (context injection, sin base vectorial)
 
 ## 🏗️ Arquitectura
 
@@ -41,7 +41,7 @@ graph LR
     subgraph SPA["Vue 3 SPA"]
         ROUTER["Vue Router<br/>Rutas protegidas"]
         STORE["Pinia Stores<br/>auth · theme · toast"]
-        VIEWS["Vistas<br/>Dashboard · Assets · RAG · Upload"]
+        VIEWS["Vistas<br/>Dashboard · Assets · Chat IA · Upload"]
         AXIOS["Axios<br/>Interceptores globales"]
     end
 
